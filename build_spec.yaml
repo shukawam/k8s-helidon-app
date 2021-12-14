@@ -1,6 +1,6 @@
 version: 0.1
 component: build
-timeoutInSeconds: 4000
+timeoutInSeconds: 40000
 shell: bash
 env:
   variables:
@@ -13,12 +13,12 @@ env:
 steps:
   - type: Command
     name: "Test Source"
-    timeoutInSeconds: 4000
+    timeoutInSeconds: 10000
     command: |
       echo $PATH
       mvn test
   - type: Command
-    timeoutInSeconds: 4000
+    timeoutInSeconds: 10000
     name: "Build Docker Image"
     command: |
       tag=${OCI_BUILD_RUN_ID}
