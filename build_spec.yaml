@@ -1,0 +1,34 @@
+version: 0.1
+component: build
+timeoutInSeconds: 4000
+shell: bash
+env:
+  variables:
+    - docker_server: nrt.ocir.io
+  vaultVariables:
+    - repository: ocid1.vaultsecret.oc1.ap-tokyo-1.amaaaaaassl65iqa3a6633az4kcvuhacslbefj57tncpysuy5y7ozldwkhyq
+  exportedVariables:
+    - tag
+
+steps:
+  - type: Command
+    name: "Test Source"
+    timeoutInSeconds: 4000
+    command: |
+      echo $PATH
+      mvn test
+  - type: Command
+    timeoutInSeconds: 4000
+    name: "Build Docker Image"
+    command: |
+      tag=${OCI_BUILD_RUN_ID}
+      echo $tag
+      docker build -t helidon-k8s-app .
+
+outputArtifacts:
+  - name: helidon-k8s-app
+    type: DOCKER_IMAGE
+    location: helidon-k8s-app
+  - name: helidon-k8s-app-manifest
+    type: BINARY
+    location: app.yaml
