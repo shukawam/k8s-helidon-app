@@ -13,9 +13,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-
-kind: Service
 apiVersion: v1
+kind: Service
 metadata:
   name: k8s-helidon-app
   labels:
@@ -29,9 +28,9 @@ spec:
   selector:
     app: k8s-helidon-app
   ports:
-  - port: 80
-    targetPort: 8080
-    name: http
+    - port: 80
+      targetPort: 8080
+      name: http
 ---
 kind: Deployment
 apiVersion: apps/v1
@@ -49,23 +48,24 @@ spec:
         version: v1
     spec:
       containers:
-      - name: k8s-helidon-app
-        image: ${docker_server}/${repository}/k8s-helidon-app:${tag}
-        imagePullPolicy: IfNotPresent
-        ports:
-        - containerPort: 8080
-        readinessProbe:
-          httpGet:
-            path: /health/ready
-            port: http
+        - name: k8s-helidon-app
+          image: ${docker_server}/${repository}/k8s-helidon-app:${tag}
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8080
+          readinessProbe:
+            httpGet:
+              path: /health/ready
+              port: http
             initialDelaySeconds: 30
             periodSeconds: 5
-        livenessProbe:
-          httpGet:
-            path: /health/live
-            port: http
+          livenessProbe:
+            httpGet:
+              path: /health/live
+              port: http
             initialDelaySeconds: 30
             periodSeconds: 5
       imagePullSecrets:
         - name: k8s-helidon-app-secret
 ---
+
