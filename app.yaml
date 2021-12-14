@@ -20,12 +20,16 @@ metadata:
   name: k8s-helidon-app
   labels:
     app: k8s-helidon-app
+  annotations:
+    service.beta.kubernetes.io/oci-load-balancer-shape: "flexible"
+    service.beta.kubernetes.io/oci-load-balancer-shape-flex-min: "10"
+    service.beta.kubernetes.io/oci-load-balancer-shape-flex-max: "20"
 spec:
-  type: NodePort
+  type: LoadBalancer
   selector:
     app: k8s-helidon-app
   ports:
-  - port: 8080
+  - port: 80
     targetPort: 8080
     name: http
 ---
@@ -34,7 +38,7 @@ apiVersion: apps/v1
 metadata:
   name: k8s-helidon-app
 spec:
-  replicas: 1
+  replicas: 3
   selector:
     matchLabels:
       app: k8s-helidon-app
@@ -46,8 +50,22 @@ spec:
     spec:
       containers:
       - name: k8s-helidon-app
-        image: k8s-helidon-app
+        image: ${docker_server}/${repository}/k8s-helidon-app:${tag}
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 8080
+        readinessProbe:
+          httpGet:
+            path: /health/ready
+            port: http
+            initialDelaySeconds: 30
+            periodSeconds: 5
+        livenessProbe:
+          httpGet:
+            path: /health/live
+            port: http
+            initialDelaySeconds: 30
+            periodSeconds: 5
+      imagePullSecrets:
+        - name: k8s-helidon-app-secret
 ---
