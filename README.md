@@ -1,10 +1,11 @@
-# Helidon Quickstart MP
+# k8s-helidon-app
 
-Sample Helidon MP project that includes multiple REST operations.
+A small skelton application running on Kubernetes.
 
 ## Build and run
 
 With JDK11+
+
 ```bash
 mvn package
 java -jar target/k8s-helidon-app.jar
@@ -12,7 +13,7 @@ java -jar target/k8s-helidon-app.jar
 
 ## Exercise the application
 
-```
+```bash
 curl -X GET http://localhost:8080/greet
 {"message":"Hello World!"}
 
@@ -27,7 +28,7 @@ curl -X GET http://localhost:8080/greet/Jose
 
 ## Try health and metrics
 
-```
+```bash
 curl -s -X GET http://localhost:8080/health
 {"outcome":"UP",...
 . . .
@@ -41,18 +42,17 @@ curl -s -X GET http://localhost:8080/metrics
 curl -H 'Accept: application/json' -X GET http://localhost:8080/metrics
 {"base":...
 . . .
-
 ```
 
 ## Build the Docker Image
 
-```
+```bash
 docker build -t k8s-helidon-app .
 ```
 
 ## Start the application with Docker
 
-```
+```bash
 docker run --rm -p 8080:8080 k8s-helidon-app:latest
 ```
 
@@ -60,7 +60,7 @@ Exercise the application as described above
 
 ## Deploy the application to Kubernetes
 
-```
+```bash
 kubectl cluster-info                         # Verify which cluster
 kubectl get pods                             # Verify connectivity to cluster
 kubectl create -f app.yaml                   # Deploy application
@@ -73,26 +73,27 @@ port number (the NodePort) instead of 8080.
 
 After you’re done, cleanup.
 
-```
+```bash
 kubectl delete -f app.yaml
 ```
 
 ## Build a native image with GraalVM
 
 GraalVM allows you to compile your programs ahead-of-time into a native
- executable. See https://www.graalvm.org/docs/reference-manual/aot-compilation/
- for more information.
+executable. See [https://www.graalvm.org/docs/reference-manual/aot-compilation/](https://www.graalvm.org/docs/reference-manual/aot-compilation/)
+for more information.
 
 You can build a native executable in 2 different ways:
-* With a local installation of GraalVM
-* Using Docker
+
+- With a local installation of GraalVM
+- Using Docker
 
 ### Local build
 
-Download Graal VM at https://www.graalvm.org/downloads, the version
- currently supported for Helidon is `20.1.0`.
+Download Graal VM at [https://www.graalvm.org/downloads](https://www.graalvm.org/downloads), the version
+currently supported for Helidon is `20.1.0`.
 
-```
+```bash
 # Setup the environment
 export GRAALVM_HOME=/path
 # build the native executable
@@ -100,14 +101,14 @@ mvn package -Pnative-image
 ```
 
 You can also put the Graal VM `bin` directory in your PATH, or pass
- `-DgraalVMHome=/path` to the Maven command.
+`-DgraalVMHome=/path` to the Maven command.
 
-See https://github.com/oracle/helidon-build-tools/tree/master/helidon-maven-plugin#goal-native-image
- for more information.
+See [https://github.com/oracle/helidon-build-tools/tree/master/helidon-maven-plugin#goal-native-image](https://github.com/oracle/helidon-build-tools/tree/master/helidon-maven-plugin#goal-native-image)
+for more information.
 
 Start the application:
 
-```
+```bash
 ./target/k8s-helidon-app
 ```
 
@@ -115,43 +116,42 @@ Start the application:
 
 Build the "native" Docker Image
 
-```
+```bash
 docker build -t k8s-helidon-app-native -f Dockerfile.native .
 ```
 
 Start the application:
 
-```
+```bash
 docker run --rm -p 8080:8080 k8s-helidon-app-native:latest
 ```
-
 
 ## Build a Java Runtime Image using jlink
 
 You can build a custom Java Runtime Image (JRI) containing the application jars and the JDK modules
 on which they depend. This image also:
 
-* Enables Class Data Sharing by default to reduce startup time.
-* Contains a customized `start` script to simplify CDS usage and support debug and test modes.
+- Enables Class Data Sharing by default to reduce startup time.
+- Contains a customized `start` script to simplify CDS usage and support debug and test modes.
 
 You can build a custom JRI in two different ways:
-* Local
-* Using Docker
 
+- Local
+- Using Docker
 
 ### Local build
 
-```
+```bash
 # build the JRI
 mvn package -Pjlink-image
 ```
 
-See https://github.com/oracle/helidon-build-tools/tree/master/helidon-maven-plugin#goal-jlink-image
- for more information.
+See [https://github.com/oracle/helidon-build-tools/tree/master/helidon-maven-plugin#goal-jlink-image](https://github.com/oracle/helidon-build-tools/tree/master/helidon-maven-plugin#goal-jlink-image)
+for more information.
 
 Start the application:
 
-```
+```bash
 ./target/k8s-helidon-app-jri/bin/start
 ```
 
@@ -159,18 +159,18 @@ Start the application:
 
 Build the JRI as a Docker Image
 
-```
+```bash
 docker build -t k8s-helidon-app-jri -f Dockerfile.jlink .
 ```
 
 Start the application:
 
-```
+```bash
 docker run --rm -p 8080:8080 k8s-helidon-app-jri:latest
 ```
 
 See the start script help:
 
-```
+```bash
 docker run --rm k8s-helidon-app-jri:latest --help
 ```
