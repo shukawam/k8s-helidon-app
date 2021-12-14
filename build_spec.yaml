@@ -4,9 +4,9 @@ timeoutInSeconds: 4000
 shell: bash
 env:
   variables:
-    - docker_server: nrt.ocir.io
+    docker_server: nrt.ocir.io
   vaultVariables:
-    - repository: ocid1.vaultsecret.oc1.ap-tokyo-1.amaaaaaassl65iqa3a6633az4kcvuhacslbefj57tncpysuy5y7ozldwkhyq
+    repository: ocid1.vaultsecret.oc1.ap-tokyo-1.amaaaaaassl65iqa3a6633az4kcvuhacslbefj57tncpysuy5y7ozldwkhyq
   exportedVariables:
     - tag
 
