@@ -1,6 +1,8 @@
 # k8s-helidon-app
 
-A small skelton application([Helidon](https://helidon.io/#/)) running on Kubernetes.
+![badge](https://github.com/shukawam/k8s-helidon-app/actions/workflows/maven.yaml/badge.svg)
+
+A sample application([Helidon](https://helidon.io/#/)) running on Kubernetes.
 
 ## Build and run
 
