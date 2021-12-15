@@ -1,6 +1,6 @@
 # k8s-helidon-app
 
-![badge](https://github.com/shukawam/k8s-helidon-app/actions/workflows/maven.yaml/badge.svg)
+![badge](https://github.com/shukawam/k8s-helidon-app/actions/workflows/maven.yml/badge.svg)
 
 A sample application([Helidon](https://helidon.io/#/)) running on Kubernetes.
 
