@@ -17,6 +17,22 @@ steps:
       tag=${OCI_BUILD_RUN_ID}
       echo $tag
       docker build -t helidon-k8s-app .
+    onFailure:
+      - type: Command
+        command: |
+          echo "Failure successfully handled"
+        timeoutInSeconds: 60
+  - type: Command
+    name: "Update Kubernetes Manifest"
+    command: |
+      sed -i -e s/'${docker_server}'/${docker_server}/g ./app.yaml \
+      | sed -e s/'${repository}'/${repository}/g \
+      | sed -e s/'${tag}'/${tag}/g
+    onFailure:
+      - type: Command
+        command: |
+          echo "Failure successfully handled"
+        timeoutInSeconds: 60
 
 outputArtifacts:
   - name: helidon-k8s-app
