@@ -1,6 +1,6 @@
 # k8s-helidon-app
 
-A small skelton application running on Kubernetes.
+A small skelton application([Helidon](https://helidon.io/#/)) running on Kubernetes.
 
 ## Build and run
 
