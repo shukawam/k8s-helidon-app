@@ -52,17 +52,18 @@ spec:
           image: ${docker_server}/${repository}/k8s-helidon-app:${tag}
           imagePullPolicy: IfNotPresent
           ports:
-            - containerPort: 8080
+            - name: api
+              containerPort: 8080
           readinessProbe:
             httpGet:
               path: /health/ready
-              port: http
+              port: api
             initialDelaySeconds: 30
             periodSeconds: 5
           livenessProbe:
             httpGet:
               path: /health/live
-              port: http
+              port: api
             initialDelaySeconds: 30
             periodSeconds: 5
       imagePullSecrets:
