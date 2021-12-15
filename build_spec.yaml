@@ -15,7 +15,6 @@ steps:
     name: "Build Docker Image"
     command: |
       tag=${OCI_BUILD_RUN_ID}
-      echo $tag
       docker build -t helidon-k8s-app .
     onFailure:
       - type: Command
@@ -25,9 +24,10 @@ steps:
   - type: Command
     name: "Update Kubernetes Manifest"
     command: |
-      sed -i -e s/'${docker_server}'/${docker_server}/g ./app.yaml \
-      | sed -e s/'${repository}'/${repository}/g \
-      | sed -e s/'${tag}'/${tag}/g
+      echo "docker_server: " ${docker_server}
+      echo "repository: " ${repository}
+      echo "tag: " ${tag}
+      sed -i -e s/'${docker_server}'/${docker_server}/g ./app.yaml | sed -e s/'${repository}'/${repository}/g | sed -e s/'${tag}'/${tag}/g
     onFailure:
       - type: Command
         command: |
