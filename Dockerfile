@@ -13,7 +13,8 @@ RUN mvn package -Dmaven.test.skip -Declipselink.weave.skip
 # Do the Maven build!
 # Incremental docker builds will resume here when you change sources
 ADD src src
-RUN mvn package -DskipTests
+RUN mvn package
+# RUN mvn package -DskipTests
 RUN echo "done!"
 
 # 2nd stage, build the runtime image

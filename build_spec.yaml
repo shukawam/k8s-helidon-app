@@ -8,26 +8,26 @@ env:
   vaultVariables:
     repository: ocid1.vaultsecret.oc1.ap-tokyo-1.amaaaaaassl65iqa3a6633az4kcvuhacslbefj57tncpysuy5y7ozldwkhyq
   exportedVariables:
-    - tag
+    - DOCKER_SERVER
+    - REPOSITORY
+    - TAG
 
 steps:
   - type: Command
-    name: "Build Docker Image"
+    name: "Export variables"
     command: |
-      tag=${OCI_TRIGGER_COMMIT_HASH}
-      docker build -t helidon-k8s-app .
+      DOCKER_SERBER=${docker_server}
+      REPOSITORY=${repository}
+      TAG=${OCI_TRIGGER_COMMIT_HASH}
     onFailure:
       - type: Command
-        command: |
+        commnd: |
           echo "Failure successfully handled"
         timeoutInSeconds: 60
   - type: Command
-    name: "Update Kubernetes Manifest"
+    name: "Build Docker Image"
     command: |
-      echo "docker_server:" ${docker_server}
-      echo "repository:" ${repository}
-      echo "tag:" ${tag}
-      sed -i -e s/'${docker_server}'/${docker_server}/g -e s/'${repository}'/${repository}/g -e s/'${tag}'/${tag}/g ./app.yaml
+      docker build -t helidon-k8s-app .
     onFailure:
       - type: Command
         command: |
