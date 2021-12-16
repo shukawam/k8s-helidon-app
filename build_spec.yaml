@@ -16,9 +16,12 @@ steps:
   - type: Command
     name: "Export variables"
     command: |
-      DOCKER_SERBER=${docker_server}
+      DOCKER_SERVER=${docker_server}
       REPOSITORY=${repository}
       TAG=${OCI_TRIGGER_COMMIT_HASH}
+      echo "DOCKER_SERVER:" ${DOCKER_SERVER}
+      echo "REPOSITORY:" ${REPOSITORY}
+      echo "TAG:" ${TAG}
     onFailure:
       - type: Command
         commnd: |
