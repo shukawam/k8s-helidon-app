@@ -19,12 +19,8 @@ metadata:
   name: k8s-helidon-app
   labels:
     app: k8s-helidon-app
-  annotations:
-    service.beta.kubernetes.io/oci-load-balancer-shape: "flexible"
-    service.beta.kubernetes.io/oci-load-balancer-shape-flex-min: "10"
-    service.beta.kubernetes.io/oci-load-balancer-shape-flex-max: "20"
 spec:
-  type: LoadBalancer
+  type: ClusterIP
   selector:
     app: k8s-helidon-app
   ports:
@@ -69,4 +65,28 @@ spec:
       imagePullSecrets:
         - name: k8s-helidon-app-secret
 ---
-
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: k8s-helidon-app
+spec: {}
+status: {}
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: k8s-helidon-app
+spec:
+  rules:
+  - host: helidon.shukawam.cf
+    http:
+      paths:
+      - backend:
+          service:
+            name: k8s-helidon-app
+            port:
+              number: 80
+        path: /
+        pathType: Prefix
+status:
+  loadBalancer: {}
