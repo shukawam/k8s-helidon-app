@@ -2,9 +2,12 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: k8s-helidon-app
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
 spec:
   rules:
-    - http:
+    - host: "shukawam.cf"
+      http:
         paths:
           - backend:
               service:
