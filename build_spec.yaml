@@ -18,7 +18,7 @@ steps:
     command: |
       DOCKER_SERVER=${docker_server}
       REPOSITORY=${repository}
-      TAG=${OCI_TRIGGER_COMMIT_HASH}
+      TAG=`echo ${OCI_BUILD_RUN_ID} | rev | cut -c 1-7`
       echo "DOCKER_SERVER:" ${DOCKER_SERVER}
       echo "REPOSITORY:" ${REPOSITORY}
       echo "TAG:" ${TAG}
@@ -30,7 +30,7 @@ steps:
   - type: Command
     name: "Build Docker Image"
     command: |
-      docker build -t helidon-k8s-app .
+      docker build -t k8s-helidon-app .
     onFailure:
       - type: Command
         command: |
@@ -38,9 +38,15 @@ steps:
         timeoutInSeconds: 60
 
 outputArtifacts:
-  - name: helidon-k8s-app
+  - name: k8s-helidon-app-image
     type: DOCKER_IMAGE
-    location: helidon-k8s-app
-  - name: helidon-k8s-app-manifest
+    location: k8s-helidon-app
+  - name: k8s-helidon-app-manifest-deployment
     type: BINARY
-    location: app.yaml
+    location: kubernetes/deployment.yaml
+  - name: k8s-helidon-app-manifest-service
+    type: BINARY
+    location: kubernetes/service.yaml
+  - name: k8s-helidon-app-manifest-ingress
+    type: BINARY
+    location: kubernetes/ingress.yaml
