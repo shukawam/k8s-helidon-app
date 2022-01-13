@@ -1,0 +1,36 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: k8s-helidon-app
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: k8s-helidon-app
+  template:
+    metadata:
+      labels:
+        app: k8s-helidon-app
+        version: v1
+    spec:
+      containers:
+        - name: k8s-helidon-app
+          image: ${DOCKER_SERVER}/${REPOSITORY}/k8s-helidon-app:${TAG}
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: api
+              containerPort: 8080
+          readinessProbe:
+            httpGet:
+              path: /health/ready
+              port: api
+            initialDelaySeconds: 30
+            periodSeconds: 5
+          livenessProbe:
+            httpGet:
+              path: /health/live
+              port: api
+            initialDelaySeconds: 30
+            periodSeconds: 5
+      imagePullSecrets:
+        - name: k8s-helidon-app-secret

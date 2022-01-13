@@ -1,0 +1,15 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: k8s-helidon-app
+spec:
+  rules:
+    - http:
+        paths:
+          - backend:
+              service:
+                name: k8s-helidon-app
+                port:
+                  number: 80
+            path: /helidon/
+            pathType: Prefix
