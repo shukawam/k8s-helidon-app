@@ -41,12 +41,9 @@ outputArtifacts:
   - name: k8s-helidon-app-image
     type: DOCKER_IMAGE
     location: k8s-helidon-app
-  - name: k8s-helidon-app-manifest-deployment
+  - name: k8s-helidon-app-manifest
     type: BINARY
-    location: kubernetes/deployment.yaml
-  - name: k8s-helidon-app-manifest-service
-    type: BINARY
-    location: kubernetes/service.yaml
+    location: kubernetes/app.yaml
   - name: k8s-helidon-app-manifest-ingress
     type: BINARY
     location: kubernetes/ingress.yaml
