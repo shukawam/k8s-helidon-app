@@ -1,0 +1,14 @@
+# Application properties. This is the default greeting
+app:
+  greeting: Hello
+  namespace: default
+
+# Microprofile server properties
+server:
+  port: 8080
+  host: 0.0.0.0
+
+# Turn on support for REST.request SimpleTimers for all JAX-RS endpoints
+metrics:
+  rest-request:
+    enabled: true

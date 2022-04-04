@@ -35,6 +35,12 @@ spec:
           ports:
             - name: api
               containerPort: 8080
+          env:
+            - name: app.namespace
+              valueFrom:
+                configMapKeyRef:
+                  name: ns-config
+                  key: NAMESPACE
           readinessProbe:
             httpGet:
               path: /health/ready
