@@ -24,51 +24,61 @@ import io.helidon.microprofile.tests.junit5.HelidonTest;
 @HelidonTest
 class MainTest {
 
-    @Inject
-    private WebTarget target;
+        @Inject
+        private WebTarget target;
 
-    @Test
-    void testHelloWorld() {
-        JsonObject jsonObject = target
-                .path("greet")
-                .request()
-                .get(JsonObject.class);
-        Assertions.assertEquals("Hello World!", jsonObject.getString("message"),
-                "default message");
+        @Test
+        void testHelloWorld() {
+                JsonObject jsonObject = target
+                                .path("greet")
+                                .request()
+                                .get(JsonObject.class);
+                Assertions.assertEquals("Hello World!", jsonObject.getString("message"),
+                                "default message");
 
-        jsonObject = target
-                .path("greet/Joe")
-                .request()
-                .get(JsonObject.class);
-        Assertions.assertEquals("Hello Joe!", jsonObject.getString("message"),
-                "hello Joe message");
+                jsonObject = target
+                                .path("greet/Joe")
+                                .request()
+                                .get(JsonObject.class);
+                Assertions.assertEquals("Hello Joe!", jsonObject.getString("message"),
+                                "hello Joe message");
 
-        try (Response r = target
-                .path("greet/greeting")
-                .request()
-                .put(Entity.entity("{\"greeting\" : \"Hola\"}", MediaType.APPLICATION_JSON))) {
-            Assertions.assertEquals(204, r.getStatus(), "PUT status code");
+                try (Response r = target
+                                .path("greet/greeting")
+                                .request()
+                                .put(Entity.entity("{\"greeting\" : \"Hola\"}", MediaType.APPLICATION_JSON))) {
+                        Assertions.assertEquals(204, r.getStatus(), "PUT status code");
+                }
+
+                jsonObject = target
+                                .path("greet/Jose")
+                                .request()
+                                .get(JsonObject.class);
+                Assertions.assertEquals("Hola Jose!", jsonObject.getString("message"),
+                                "hola Jose message");
+
+                try (Response r = target
+                                .path("metrics")
+                                .request()
+                                .get()) {
+                        Assertions.assertEquals(200, r.getStatus(), "GET metrics status code");
+                }
+
+                try (Response r = target
+                                .path("health")
+                                .request()
+                                .get()) {
+                        Assertions.assertEquals(200, r.getStatus(), "GET health status code");
+                }
         }
 
-        jsonObject = target
-                .path("greet/Jose")
-                .request()
-                .get(JsonObject.class);
-        Assertions.assertEquals("Hola Jose!", jsonObject.getString("message"),
-                "hola Jose message");
-
-        try (Response r = target
-                .path("metrics")
-                .request()
-                .get()) {
-            Assertions.assertEquals(200, r.getStatus(), "GET metrics status code");
+        @Test
+        void testNamespace() {
+                JsonObject jsonObject = target
+                                .path("namespace")
+                                .request()
+                                .get(JsonObject.class);
+                Assertions.assertEquals("default", jsonObject.getString("namespace"),
+                                "default namespace");
         }
-
-        try (Response r = target
-                .path("health")
-                .request()
-                .get()) {
-            Assertions.assertEquals(200, r.getStatus(), "GET health status code");
-        }
-    }
 }
