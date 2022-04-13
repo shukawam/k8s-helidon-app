@@ -28,10 +28,9 @@ steps:
           echo "Failure successfully handled"
         timeoutInSeconds: 60
   - type: Command
-    name: "Build Docker Image(Multi platform)"
+    name: "Build Docker Image"
     command: |
-      docker buildx create --use --name AMD-ARM-build --platform linux/ARM64,linux/amd64
-      docker buildx build -t k8s-helidon-app --platform linux/amd64,linux/ARM64 .
+      docker build -t k8s-helidon-app .
     onFailure:
       - type: Command
         command: |
