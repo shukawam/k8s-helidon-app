@@ -17,6 +17,10 @@ kind: Deployment
 apiVersion: apps/v1
 metadata:
   name: k8s-helidon-app
+  labels:
+    app: k8s-helidon-app
+  annotations:
+    prometheus.io/scrape: 'true'
 spec:
   replicas: 3
   selector:
