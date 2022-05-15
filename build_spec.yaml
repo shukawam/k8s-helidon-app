@@ -30,7 +30,7 @@ steps:
   - type: Command
     name: "Build Docker Image"
     command: |
-      docker build -t k8s-helidon-app .
+      docker build -t k8s-helidon-app-monitoring .
     onFailure:
       - type: Command
         command: |
@@ -38,12 +38,9 @@ steps:
         timeoutInSeconds: 60
 
 outputArtifacts:
-  - name: k8s-helidon-app-image
+  - name: k8s-helidon-app-monitoring-image
     type: DOCKER_IMAGE
-    location: k8s-helidon-app
-  - name: k8s-helidon-app-manifest
+    location: k8s-helidon-app-monitoring
+  - name: k8s-helidon-app-monitoring-manifest
     type: BINARY
     location: kubernetes/app.yaml
-  - name: k8s-helidon-app-manifest-ingress
-    type: BINARY
-    location: kubernetes/ingress.yaml
