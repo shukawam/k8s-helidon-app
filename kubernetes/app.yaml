@@ -34,7 +34,7 @@ spec:
     spec:
       containers:
         - name: k8s-helidon-app
-          image: ${DOCKER_SERVER}/${REPOSITORY}/k8s-helidon-app:${TAG}
+          image: ${DOCKER_SERVER}/${REPOSITORY}/k8s-helidon-app-monitoring:${TAG}
           imagePullPolicy: IfNotPresent
           ports:
             - name: api
