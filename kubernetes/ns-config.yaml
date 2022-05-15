@@ -1,7 +1,7 @@
 apiVersion: v1
 data:
-  NAMESPACE: k8s-helidon-app
+  NAMESPACE: k8s-helidon-app-monitoring
 kind: ConfigMap
 metadata:
   name: ns-config
-  namespace: k8s-helidon-app
+  namespace: k8s-helidon-app-monitoring
