@@ -21,7 +21,7 @@ metadata:
   namespace: k8s-helidon-app-monitoring
 spec:
   hosts:
-    - "helidon-monitoring.ochacafe-s5.cf"
+    - "*"
   gateways:
     - k8s-helidon-app-monitoring/app-gateway
   http:
