@@ -18,6 +18,7 @@ steps:
     command: |
       echo $PATH
       echo $JAVA_HOME
+      which java
   - type: Command
     name: "Export variables"
     command: |
