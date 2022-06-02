@@ -14,6 +14,11 @@ env:
 
 steps:
   - type: Command
+    name: "Print build runtime spec"
+    command: |
+      echo $PATH
+      echo $JAVA_HOME
+  - type: Command
     name: "Export variables"
     command: |
       DOCKER_SERVER=${docker_server}
