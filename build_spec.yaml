@@ -25,6 +25,16 @@ steps:
         commnd: |
           echo "Failure successfully handled"
         timeoutInSeconds: 60
+  - type: VulnerabilityAudit
+    name: "Vulnerability Audit Step"
+    configuration:
+      buildType: maven
+      pomFilePath: ${OCI_PRIMARY_SOURCE_DIR}/pom.xml
+      maxPermissibleCvssV2Score: 10.0
+      maxPermissibleCvssV3Score: 10.0
+    knowledgeBaseId: ocid1.admknowledgebase.oc1.ap-tokyo-1.amaaaaaassl65iqaxlcyg3cy3fakw4wnrktgjjc4o72ylglzndmjxxro5fea
+    vulnerabilityAuditCompartmentId: ocid1.compartment.oc1..aaaaaaaanjtbllhqxcg67dq7em3vto2mvsbc6pbgk4pw6cx37afzk3tngmoa
+    vulnerabilityAuditName: k8s-helidon-app-${TAG}
   - type: Command
     name: "Docker BuildKit Setup"
     timeoutInSeconds: 140
