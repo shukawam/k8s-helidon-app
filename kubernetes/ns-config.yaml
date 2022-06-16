@@ -1,7 +1,0 @@
-apiVersion: v1
-data:
-  NAMESPACE: k8s-helidon-app
-kind: ConfigMap
-metadata:
-  name: ns-config
-  namespace: k8s-helidon-app

@@ -38,9 +38,8 @@ spec:
           env:
             - name: app.namespace
               valueFrom:
-                configMapKeyRef:
-                  name: ns-config
-                  key: NAMESPACE
+                fieldRef:
+                  fieldPath: metadata.namespace
           readinessProbe:
             httpGet:
               path: /health/ready
