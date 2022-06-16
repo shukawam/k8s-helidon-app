@@ -18,6 +18,8 @@ steps:
   - type: Command
     name: "Export variables"
     command: |
+      DOCKER_SERVER=${docker_server}
+      REPOSITORY=${repository}
       TAG=`echo ${OCI_BUILD_RUN_ID} | rev | cut -c 1-7`
       echo "TAG:" ${TAG}
     onFailure:
