@@ -8,6 +8,8 @@ env:
     BUILD_CACHE_OS_BUCKET_NAME: build-cache
     BUILD_CACHE_OS_FILE_NAME: k8s-helidon-app-cache.zip
     BUILDX_VERSION: v0.8.2
+    JACOCO_REPORT_BUCKET_NAME: jacoco-report
+    JACOCO_REPORT_FILE_NAME: jacoco-report.zip
   vaultVariables:
     repository: ocid1.vaultsecret.oc1.ap-tokyo-1.amaaaaaassl65iqa3a6633az4kcvuhacslbefj57tncpysuy5y7ozldwkhyq
   exportedVariables:
@@ -66,11 +68,17 @@ steps:
           echo "Failure successfully handled"
         timeoutInSeconds: 60
   - type: Command
+    name: "Report coverage"
+    command: |
+      mvn jacoco:prepare-agent test jacoco:report
+      zip -r ${JACOCO_REPORT_FILE_NAME} ${OCI_PRIMARY_SOURCE_DIR}/target/site/jacoco/
+      oci os object put --bucket-name ${JACOCO_REPORT_BUCKET_NAME} --file ${JACOCO_REPORT_FILE_NAME} --force
+  - type: Command
     name: "Build Cache Upload"
     timeoutInSeconds: 300
     command: |
       rm ${BUILD_CACHE_OS_FILE_NAME} && zip -r ${BUILD_CACHE_OS_FILE_NAME} k8s-helidon-app-cache/*
-      oci os object put --bucket-name build-cache --file ${BUILD_CACHE_OS_FILE_NAME} --force
+      oci os object put --bucket-name ${BUILD_CACHE_OS_BUCKET_NAME} --file ${BUILD_CACHE_OS_FILE_NAME} --force
 
 outputArtifacts:
   - name: k8s-helidon-app-image

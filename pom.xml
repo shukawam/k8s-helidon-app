@@ -32,6 +32,10 @@
     <version>1.0</version>
     <name>k8s-helidon-app</name>
 
+    <properties>
+        <jacoco.version>0.8.8</jacoco.version>
+    </properties>
+
     <dependencies>
         <dependency>
             <groupId>io.helidon.microprofile.bundles</groupId>
@@ -53,6 +57,11 @@
             <artifactId>helidon-microprofile-tests-junit5</artifactId>
             <scope>test</scope>
         </dependency>
+        <!-- <dependency>
+            <groupId>org.jacoco</groupId>
+            <artifactId>jacoco-maven-plugin</artifactId>
+            <version>${jacoco.version}</version>
+        </dependency> -->
     </dependencies>
 
     <build>
@@ -84,6 +93,28 @@
                     </execution>
                 </executions>
             </plugin>
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>${jacoco.version}</version>
+            </plugin>
         </plugins>
     </build>
+
+    <reporting>
+        <plugins>
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <reportSets>
+                    <reportSet>
+                        <reports>
+                        <!-- select non-aggregate reports -->
+                        <report>report</report>
+                        </reports>
+                    </reportSet>
+                </reportSets>
+            </plugin>
+        </plugins>
+    </reporting>
 </project>
