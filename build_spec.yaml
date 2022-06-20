@@ -70,9 +70,15 @@ steps:
   - type: Command
     name: "Report coverage"
     command: |
+      cd ${OCI_PRIMARY_SOURCE_DIR}
       mvn jacoco:prepare-agent test jacoco:report
       zip -r ${JACOCO_REPORT_FILE_NAME} ${OCI_PRIMARY_SOURCE_DIR}/target/site/jacoco/
       oci os object put --bucket-name ${JACOCO_REPORT_BUCKET_NAME} --file ${JACOCO_REPORT_FILE_NAME} --force
+    onFailure:
+      - type: Command
+        command: |
+          echo "Failure successfully handled"
+        timeoutInSeconds: 60
   - type: Command
     name: "Build Cache Upload"
     timeoutInSeconds: 300
