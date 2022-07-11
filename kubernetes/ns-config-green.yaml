@@ -1,7 +1,7 @@
 apiVersion: v1
 data:
-  NAMESPACE: blue
+  NAMESPACE: green
 kind: ConfigMap
 metadata:
   name: ns-config
-  namespace: k8s-helidon-app
+  namespace: k8s-helidon-app-green
