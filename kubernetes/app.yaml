@@ -4,6 +4,7 @@ metadata:
   name: k8s-helidon-app
   labels:
     app: k8s-helidon-app
+    prometheus.io/scrape: "true"
 spec:
   type: ClusterIP
   selector:
