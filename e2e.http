@@ -1,3 +1,0 @@
-@endpoint = http://helidon.shukawam.com
-
-GET {{endpoint}}/namespace HTTP/1.1
