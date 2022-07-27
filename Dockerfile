@@ -1,6 +1,6 @@
 
 # 1st stage, build the app
-FROM maven:3.6-jdk-17 as build
+FROM maven:3.8.6-openjdk-18 as build
 
 WORKDIR /helidon
 
@@ -18,7 +18,7 @@ RUN mvn package
 RUN echo "done!"
 
 # 2nd stage, build the runtime image
-FROM openjdk:17-jre-slim
+FROM openjdk:17.0.2
 WORKDIR /helidon
 
 # Copy the binary built in the 1st stage
