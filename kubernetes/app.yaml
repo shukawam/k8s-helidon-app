@@ -55,4 +55,4 @@ spec:
             initialDelaySeconds: 30
             periodSeconds: 5
       imagePullSecrets:
-        - name: k8s-helidon-app-secret
+        - name: ocir-secret
