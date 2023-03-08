@@ -1,40 +1,91 @@
-# k8s-helidon-app
+# cowweb-helidon
 
-![badge](https://github.com/shukawam/k8s-helidon-app/actions/workflows/maven.yml/badge.svg)
+![badge](https://github.com/oracle-japan/cowweb-helidon/actions/workflows/maven.yml/badge.svg)
 
-A sample application([Helidon](https://helidon.io/#/)) running on Kubernetes.
+Cowsay Web API.
 
 ## Build and run
 
-With JDK11+
+With JDK19+
 
 ```bash
-mvn package
-java -jar target/k8s-helidon-app.jar
+./mvnw package
+java --enable-preview -jar target/cowweb-helidon.jar
 ```
 
 ## Exercise the application
 
+cowsay's say.
+
 ```bash
-curl -X GET http://localhost:8080/greet
-{"message":"Hello World!"}
+curl -X GET http://localhost:8080/cowsay/say
+ ______
+< Moo! >
+ ------
+        \   ^__^
+         \  (oo)\_______
+            (__)\       )\/\
+                ||----w |
+                ||     ||
 
-curl -X GET http://localhost:8080/greet/Joe
-{"message":"Hello Joe!"}
+curl -X GET http://localhost:8080/cowsay/say?say=Hello
+ _______
+< Hello >
+ -------
+        \   ^__^
+         \  (oo)\_______
+            (__)\       )\/\
+                ||----w |
+                ||     ||
 
-curl -X PUT -H "Content-Type: application/json" -d '{"greeting" : "Hola"}' http://localhost:8080/greet/greeting
-
-curl -X GET http://localhost:8080/greet/Jose
-{"message":"Hola Jose!"}
+curl -X GET http://localhost:8080/cowsay/say?say=Wow!&cowfile=www
+ _______
+< Wow! >
+ -------
+        \   ^__^
+         \  (oo)\_______
+            (__)\       )\/\
+                ||--WWW |
+                ||     ||
 ```
 
-## Try health and metrics
+cowsay's think.
 
 ```bash
-curl -s -X GET http://localhost:8080/health
-{"outcome":"UP",...
-. . .
+curl -X GET http://localhost:8080/cowsay/think
+ ______
+( Moo! )
+ ------
+        o   ^__^
+         o  (oo)\_______
+            (__)\       )\/\
+                ||----w |
+                ||     ||
 
+curl -X GET http://localhost:8080/cowsay/think?think=Hello
+ _______
+( Hello )
+ -------
+        o   ^__^
+         o  (oo)\_______
+            (__)\       )\/\
+                ||----w |
+                ||     ||
+
+curl -X GET http://localhost:8080/cowsay/think?think=Wow!&cowfile=www
+ ______
+( Wow! )
+ ------
+        o   ^__^
+         o  (oo)\_______
+            (__)\       )\/\
+                ||--WWW |
+                ||     ||
+```
+
+## Try metrics
+
+```bash
 # Prometheus Format
 curl -s -X GET http://localhost:8080/metrics
 # TYPE base:gc_g1_young_generation_count gauge
@@ -46,133 +97,80 @@ curl -H 'Accept: application/json' -X GET http://localhost:8080/metrics
 . . .
 ```
 
-## Build the Docker Image
+## Try health
 
 ```bash
-docker build -t k8s-helidon-app .
+curl -s -X GET http://localhost:8080/health
+{"status":"UP","checks":[]}
 ```
 
-## Start the application with Docker
+## Building a Native Image
+
+Make sure you have GraalVM locally installed:
 
 ```bash
-docker run --rm -p 8080:8080 k8s-helidon-app:latest
+$GRAALVM_HOME/bin/native-image --version
 ```
 
-Exercise the application as described above
-
-## Deploy the application to Kubernetes
+Build the native image using the native image profile:
 
 ```bash
-kubectl cluster-info                         # Verify which cluster
-kubectl get pods                             # Verify connectivity to cluster
-kubectl create -f app.yaml                   # Deploy application
-kubectl get pods                             # Wait for quickstart pod to be RUNNING
-kubectl get service helidon-quickstart-mp    # Verify deployed service
+./mvnw package -Pnative-image
 ```
 
-Note the PORTs. You can now exercise the application as you did before but use the second
-port number (the NodePort) instead of 8080.
-
-After you’re done, cleanup.
+This uses the helidon-maven-plugin to perform the native compilation using your installed copy of GraalVM. It might take a while to complete.
+Once it completes start the application using the native executable (no JVM!):
 
 ```bash
-kubectl delete -f app.yaml
+./target/cowweb-helidon
 ```
 
-## Build a native image with GraalVM
+Yep, it starts fast. You can exercise the application’s endpoints as before.
 
-GraalVM allows you to compile your programs ahead-of-time into a native
-executable. See [https://www.graalvm.org/docs/reference-manual/aot-compilation/](https://www.graalvm.org/docs/reference-manual/aot-compilation/)
-for more information.
-
-You can build a native executable in 2 different ways:
-
-- With a local installation of GraalVM
-- Using Docker
-
-### Local build
-
-Download Graal VM at [https://www.graalvm.org/downloads](https://www.graalvm.org/downloads), the version
-currently supported for Helidon is `20.1.0`.
+## Building the Docker Image
 
 ```bash
-# Setup the environment
-export GRAALVM_HOME=/path
-# build the native executable
-mvn package -Pnative-image
+docker build -t cowweb-helidon .
 ```
 
-You can also put the Graal VM `bin` directory in your PATH, or pass
-`-DgraalVMHome=/path` to the Maven command.
-
-See [https://github.com/oracle/helidon-build-tools/tree/master/helidon-maven-plugin#goal-native-image](https://github.com/oracle/helidon-build-tools/tree/master/helidon-maven-plugin#goal-native-image)
-for more information.
-
-Start the application:
+## Running the Docker Image
 
 ```bash
-./target/k8s-helidon-app
+docker run --rm -p 8080:8080 cowweb-helidon:latest
 ```
 
-### Multi-stage Docker build
+Exercise the application as described above.
 
-Build the "native" Docker Image
+## Building a Custom Runtime Image
+
+Build the custom runtime image using the jlink image profile:
 
 ```bash
-docker build -t k8s-helidon-app-native -f Dockerfile.native .
+./mvn package -Pjlink-image
 ```
 
-Start the application:
+This uses the helidon-maven-plugin to perform the custom image generation.
+After the build completes it will report some statistics about the build including the reduction in image size.
+
+The target/cowweb-helidon-jri directory is a self contained custom image of your application. It contains your application,
+its runtime dependencies and the JDK modules it depends on. You can start your application using the provide start script:
 
 ```bash
-docker run --rm -p 8080:8080 k8s-helidon-app-native:latest
+./target/cowweb-helidon-jri/bin/start
 ```
 
-## Build a Java Runtime Image using jlink
+Class Data Sharing (CDS) Archive
+Also included in the custom image is a Class Data Sharing (CDS) archive that improves your application’s startup
+performance and in-memory footprint. You can learn more about Class Data Sharing in the JDK documentation.
 
-You can build a custom Java Runtime Image (JRI) containing the application jars and the JDK modules
-on which they depend. This image also:
+The CDS archive increases your image size to get these performance optimizations. It can be of significant size (tens of MB).
+The size of the CDS archive is reported at the end of the build output.
 
-- Enables Class Data Sharing by default to reduce startup time.
-- Contains a customized `start` script to simplify CDS usage and support debug and test modes.
-
-You can build a custom JRI in two different ways:
-
-- Local
-- Using Docker
-
-### Local build
+If you’d rather have a smaller image size (with a slightly increased startup time) you can skip the creation of the CDS
+archive by executing your build like this:
 
 ```bash
-# build the JRI
-mvn package -Pjlink-image
+./mvn package -Pjlink-image -Djlink.image.addClassDataSharingArchive=false
 ```
 
-See [https://github.com/oracle/helidon-build-tools/tree/master/helidon-maven-plugin#goal-jlink-image](https://github.com/oracle/helidon-build-tools/tree/master/helidon-maven-plugin#goal-jlink-image)
-for more information.
-
-Start the application:
-
-```bash
-./target/k8s-helidon-app-jri/bin/start
-```
-
-### Multi-stage Docker build
-
-Build the JRI as a Docker Image
-
-```bash
-docker build -t k8s-helidon-app-jri -f Dockerfile.jlink .
-```
-
-Start the application:
-
-```bash
-docker run --rm -p 8080:8080 k8s-helidon-app-jri:latest
-```
-
-See the start script help:
-
-```bash
-docker run --rm k8s-helidon-app-jri:latest --help
-```
+For more information on available configuration options see the helidon-maven-plugin documentation.
