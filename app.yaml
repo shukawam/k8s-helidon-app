@@ -23,7 +23,7 @@ metadata:
     kubernetes.io/ingress.class: "nginx"
 spec:
   rules:
-    - host: helidon.shukawam.com
+    - host: helidon.shukawam.me
       http:
         paths:
           - backend:
