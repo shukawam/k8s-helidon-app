@@ -19,6 +19,7 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: k8s-helidon-app
+  namespace: examples
   annotations:
     kubernetes.io/ingress.class: "nginx"
 spec:
