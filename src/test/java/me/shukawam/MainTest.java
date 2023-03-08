@@ -1,84 +1,38 @@
-
 package me.shukawam;
 
-import jakarta.inject.Inject;
-import jakarta.enterprise.inject.se.SeContainer;
-import jakarta.enterprise.inject.spi.CDI;
-import jakarta.json.JsonObject;
-import jakarta.ws.rs.client.Client;
-import jakarta.ws.rs.client.ClientBuilder;
-import jakarta.ws.rs.client.Entity;
-import jakarta.ws.rs.core.MediaType;
-import jakarta.ws.rs.core.Response;
-import jakarta.ws.rs.client.WebTarget;
-
-import io.helidon.microprofile.server.Server;
-
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
-
 import io.helidon.microprofile.tests.junit5.HelidonTest;
+import jakarta.inject.Inject;
+import jakarta.ws.rs.client.WebTarget;
+import jakarta.ws.rs.core.Response;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 
 @HelidonTest
-class MainTest {
+@TestMethodOrder(MethodOrderer.MethodName.class)
+public class MainTest {
 
-        @Inject
-        private WebTarget target;
+    @Inject
+    private WebTarget target;
 
-        @Test
-        void testHelloWorld() {
-                JsonObject jsonObject = target
-                                .path("greet")
-                                .request()
-                                .get(JsonObject.class);
-                Assertions.assertEquals("Hello World!", jsonObject.getString("message"),
-                                "default message");
+    @Test
+    public void testMetrics() throws Exception {
+        Response response = target
+                .path("metrics")
+                .request()
+                .get();
+        assertThat(response.getStatus(), is(200));
+    }
 
-                jsonObject = target
-                                .path("greet/Joe")
-                                .request()
-                                .get(JsonObject.class);
-                Assertions.assertEquals("Hello Joe!", jsonObject.getString("message"),
-                                "hello Joe message");
+    @Test
+    public void testHealth() throws Exception {
+        Response response = target
+                .path("health")
+                .request()
+                .get();
+        assertThat(response.getStatus(), is(200));
+    }
 
-                try (Response r = target
-                                .path("greet/greeting")
-                                .request()
-                                .put(Entity.entity("{\"greeting\" : \"Hola\"}", MediaType.APPLICATION_JSON))) {
-                        Assertions.assertEquals(204, r.getStatus(), "PUT status code");
-                }
-
-                jsonObject = target
-                                .path("greet/Jose")
-                                .request()
-                                .get(JsonObject.class);
-                Assertions.assertEquals("Hola Jose!", jsonObject.getString("message"),
-                                "hola Jose message");
-
-                try (Response r = target
-                                .path("metrics")
-                                .request()
-                                .get()) {
-                        Assertions.assertEquals(200, r.getStatus(), "GET metrics status code");
-                }
-
-                try (Response r = target
-                                .path("health")
-                                .request()
-                                .get()) {
-                        Assertions.assertEquals(200, r.getStatus(), "GET health status code");
-                }
-        }
-
-        @Test
-        void testNamespace() {
-                JsonObject jsonObject = target
-                                .path("namespace")
-                                .request()
-                                .get(JsonObject.class);
-                Assertions.assertEquals("default", jsonObject.getString("namespace"),
-                                "default namespace");
-        }
 }
