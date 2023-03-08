@@ -21,9 +21,9 @@ FROM eclipse-temurin:19.0.2_7-jdk
 WORKDIR /helidon
 
 # Copy the binary built in the 1st stage
-COPY --from=build /helidon/target/cowweb-helidon.jar ./
+COPY --from=build /helidon/target/k8s-helidon-app.jar ./
 COPY --from=build /helidon/target/libs ./libs
 
-CMD ["java", "--enable-preview" ,"-jar", "cowweb-helidon.jar"]
+CMD ["java", "--enable-preview" ,"-jar", "k8s-helidon-app.jar"]
 
 EXPOSE 8080
