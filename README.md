@@ -1,8 +1,18 @@
-# cowweb-helidon
+# Kubernetes(K8s) Helidon App
 
-![badge](https://github.com/oracle-japan/cowweb-helidon/actions/workflows/maven.yml/badge.svg)
+![badge](https://github.com/shukawam/k8s-helidon-app/actions/workflows/maven.yml/badge.svg)
 
 Cowsay Web API.
+
+- [Build and run](#build-and-run)
+- [Exercise the application](#exercise-the-application)
+- [Try metrics](#try-metrics)
+  - [(option) Grafana Dashboard](#option-grafana-dashboard)
+- [Try health](#try-health)
+- [Building a Native Image](#building-a-native-image)
+- [Building the Docker Image](#building-the-docker-image)
+- [Running the Docker Image](#running-the-docker-image)
+- [Building a Custom Runtime Image](#building-a-custom-runtime-image)
 
 ## Build and run
 
@@ -97,6 +107,12 @@ curl -H 'Accept: application/json' -X GET http://localhost:8080/metrics
 . . .
 ```
 
+### (option) Grafana Dashboard
+
+Import `grafana/helidon-dashboard.json` into Grafana(running on K8s w/ Prometheus). You can see metrics.
+
+![grafana](img/grafana.png)
+
 ## Try health
 
 ```bash
@@ -174,3 +190,5 @@ archive by executing your build like this:
 ```
 
 For more information on available configuration options see the helidon-maven-plugin documentation.
+
+#
