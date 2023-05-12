@@ -35,4 +35,4 @@ jobs:
           tags: |
             ${{ env.IMAGE }}:latest
         env:
-          IMAGE: ghcr.io/${{ github.repository }}/k8s-helidon-app:1.0.0
+          IMAGE: ghcr.io/${{ github.repository }}
