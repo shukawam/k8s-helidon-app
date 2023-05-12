@@ -9,8 +9,6 @@ import jakarta.ws.rs.QueryParam;
 import java.util.*;
 import java.util.logging.Logger;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
-import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
-import org.eclipse.microprofile.openapi.annotations.responses.APIResponses;
 
 /**
  * Remote cowsay invoker using Helidon.
@@ -28,7 +26,9 @@ public class CowsayResource {
     private final String pingReplyMessage;
 
     @Inject
-    public CowsayResource(@ConfigProperty(name = "cowweb.message") String message, @ConfigProperty(name = "cowweb.cowfile") String cowfile, @ConfigProperty(name = "cowweb.ping-message") String pingReplyMessage) {
+    public CowsayResource(@ConfigProperty(name = "cowweb.message") String message,
+            @ConfigProperty(name = "cowweb.cowfile") String cowfile,
+            @ConfigProperty(name = "cowweb.ping-message") String pingReplyMessage) {
         this.defaultMessage = message;
         this.defaultCowfile = cowfile;
         this.pingReplyMessage = pingReplyMessage;
@@ -39,13 +39,14 @@ public class CowsayResource {
      *
      * @param message
      * @param cowfile
+     *
      * @return Cowsay's 'say' message.
      */
     @GET
     @Path("/say")
     public String say(@QueryParam("say") Optional<String> message, @QueryParam("cowfile") Optional<String> cowfile) {
         var env = message.map(m -> System.getenv(m));
-        var params = new String[]{"-f", cowfile.orElse(defaultCowfile), env.orElse(message.orElse(defaultMessage))};
+        var params = new String[] { "-f", cowfile.orElse(defaultCowfile), env.orElse(message.orElse(defaultMessage)) };
         return Cowsay.say(params);
     }
 
@@ -54,13 +55,15 @@ public class CowsayResource {
      *
      * @param message
      * @param cowfile
+     *
      * @return Return cowsay's 'think' message.
      */
     @GET
     @Path("/think")
-    public String think(@QueryParam("think") Optional<String> message, @QueryParam("cowfile") Optional<String> cowfile) {
+    public String think(@QueryParam("think") Optional<String> message,
+            @QueryParam("cowfile") Optional<String> cowfile) {
         var env = message.map(m -> System.getenv(m));
-        var params = new String[]{"-f", cowfile.orElse(defaultCowfile), env.orElse(message.orElse(defaultMessage))};
+        var params = new String[] { "-f", cowfile.orElse(defaultCowfile), env.orElse(message.orElse(defaultMessage)) };
         return Cowsay.think(params);
     }
 

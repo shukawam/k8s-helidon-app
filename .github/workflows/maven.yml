@@ -1,9 +1,7 @@
-# This workflow will build a Java project with Maven, and cache/restore any dependencies to improve the workflow execution time
-# For more information see: https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-maven
-
 name: Java CI with Maven
 
 on:
+  workflow_dispatch:
   push:
     branches: [main]
   pull_request:
@@ -13,12 +11,28 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - name: Set up JDK 19
-        uses: actions/setup-java@v2
+      - uses: actions/checkout@v3
+
+      - name: Set up JDK 20
+        uses: actions/setup-java@v3
         with:
-          java-version: "19"
-          distribution: "adopt"
+          java-version: "20"
+          distribution: "temurin"
           cache: maven
+
+      - name: Format chack
+        run: |
+          mvn formatter:validate
+
       - name: Test with Maven
-        run: mvn test
+        run: |
+          mvn test
+
+      - name: Build and push
+        uses: docker/build-push-action@v4
+        with:
+          push: true
+          tags: |
+            ${{ env.IMAGE }}:latest
+        env:
+          IMAGE: ghcr.io/${{ github.repository }}/k8s-helidon-app:1.0.0

@@ -6,7 +6,7 @@ server:
 # Change the following to true to enable the optional MicroProfile Metrics REST.request metrics
 metrics:
   rest-request:
-    enabled: false
+    enabled: true
 
 # Cowweb config
 cowweb:

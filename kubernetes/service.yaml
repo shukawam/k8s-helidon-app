@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: k8s-helidon-app
+  labels:
+    app: k8s-helidon-app
+    prometheus.io/scrape: "true"
+spec:
+  type: ClusterIP
+  selector:
+    app: k8s-helidon-app
+  ports:
+    - port: 8080
+      targetPort: 8080
+      name: http

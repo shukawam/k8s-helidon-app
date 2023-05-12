@@ -19,19 +19,13 @@ public class MainTest {
 
     @Test
     public void testMetrics() throws Exception {
-        Response response = target
-                .path("metrics")
-                .request()
-                .get();
+        Response response = target.path("metrics").request().get();
         assertThat(response.getStatus(), is(200));
     }
 
     @Test
     public void testHealth() throws Exception {
-        Response response = target
-                .path("health")
-                .request()
-                .get();
+        Response response = target.path("health").request().get();
         assertThat(response.getStatus(), is(200));
     }
 

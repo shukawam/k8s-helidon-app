@@ -13,6 +13,6 @@ spec:
               service:
                 name: k8s-helidon-app
                 port:
-                  number: 80
+                  number: 8080
             path: /
             pathType: Prefix

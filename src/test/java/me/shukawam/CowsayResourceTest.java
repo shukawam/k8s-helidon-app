@@ -31,76 +31,51 @@ public class CowsayResourceTest {
 
     @Test
     public void testCowsayDefault() {
-        var actual = target
-            .path("cowsay/say")
-            .request()
-            .get(String.class);
-        var expected = Cowsay.say(new String[]{"-f", "default", "Moo!"});
+        var actual = target.path("cowsay/say").request().get(String.class);
+        var expected = Cowsay.say(new String[] { "-f", "default", "Moo!" });
         assertEquals(expected, actual, "HTTP Response of /cowsay/say");
     }
 
     @Test
     public void testCowsayWithMessage() {
-        var actual = target
-            .path("cowsay/say")
-            .queryParam("say", "Hello")
-            .request()
-            .get(String.class);
-        var expected = Cowsay.say(new String[]{"-f", "default", "Hello"});
+        var actual = target.path("cowsay/say").queryParam("say", "Hello").request().get(String.class);
+        var expected = Cowsay.say(new String[] { "-f", "default", "Hello" });
         assertEquals(expected, actual, "HTTP Response of /cowsay/say?message=Hello");
     }
 
     @Test
     public void testCowsayWithMessageWithCowfile() {
-        var actual = target
-            .path("cowsay/say")
-            .queryParam("say", "Hello")
-            .queryParam("cowfile", "www")
-            .request()
-            .get(String.class);
-        var expected = Cowsay.say(new String[]{"-f", "www", "Hello"});
+        var actual = target.path("cowsay/say").queryParam("say", "Hello").queryParam("cowfile", "www").request()
+                .get(String.class);
+        var expected = Cowsay.say(new String[] { "-f", "www", "Hello" });
         assertEquals(expected, actual, "HTTP Response of /cowsay/say?message=Hello&cowfile=www");
     }
 
     @Test
     public void testCowthinkDefault() {
-        var actual = target
-            .path("cowsay/think")
-            .request()
-            .get(String.class);
-        var expected = Cowsay.think(new String[]{"-f", "default", "Moo!"});
+        var actual = target.path("cowsay/think").request().get(String.class);
+        var expected = Cowsay.think(new String[] { "-f", "default", "Moo!" });
         assertEquals(expected, actual, "HTTP Response of /cowsay/say");
     }
 
     @Test
     public void testCowthinkWithMessage() {
-        var actual = target
-            .path("cowsay/think")
-            .queryParam("think", "Hello")
-            .request()
-            .get(String.class);
-        var expected = Cowsay.think(new String[]{"-f", "default", "Hello"});
+        var actual = target.path("cowsay/think").queryParam("think", "Hello").request().get(String.class);
+        var expected = Cowsay.think(new String[] { "-f", "default", "Hello" });
         assertEquals(expected, actual, "HTTP Response of /cowsay/say?message=Hello");
     }
 
     @Test
     public void testCowthinkWithMessageWithCowfile() {
-        var actual = target
-            .path("cowsay/think")
-            .queryParam("think", "Hello")
-            .queryParam("cowfile", "www")
-            .request()
-            .get(String.class);
-        var expected = Cowsay.think(new String[]{"-f", "www", "Hello"});
+        var actual = target.path("cowsay/think").queryParam("think", "Hello").queryParam("cowfile", "www").request()
+                .get(String.class);
+        var expected = Cowsay.think(new String[] { "-f", "www", "Hello" });
         assertEquals(expected, actual, "HTTP Response of /cowsay/say?message=Hello&cowfile=www");
     }
 
     @Test
     public void testCowwebPing() {
-        var actual = target
-            .path("cowsay/ping")
-            .request()
-            .get(String.class);
+        var actual = target.path("cowsay/ping").request().get(String.class);
         var expected = "I'm working...\n";
         assertEquals(expected, actual, "HTTP Response of /cowsay/ping");
     }
