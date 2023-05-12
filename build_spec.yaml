@@ -1,0 +1,41 @@
+version: 0.1
+component: build
+timeoutInSeconds: 10000
+shell: bash
+env:
+  vaultVariables:
+    ghcr_username: ocid1.vaultsecret.oc1.ap-tokyo-1.amaaaaaassl65iqacndwhu7jq2m42pes26rwwicxfh7plzij5jnuuayi2fgq
+    ghcr_password: ocid1.vaultsecret.oc1.ap-tokyo-1.amaaaaaassl65iqas5l6aq3d27pred7wk7t7tki6blmoi2kx7comfh23jmra
+  exportedVariables:
+    - tag
+
+steps:
+  - type: Command
+    name: "Export variables"
+    command: |
+      tag=`echo ${OCI_BUILD_RUN_ID} | rev | cut -c 1-7`
+    onFailure:
+      - type: Command
+        commnd: |
+          echo "Failure successfully handled"
+        timeoutInSeconds: 60
+
+  - type: Command
+    name: "Pull container image"
+    command: |
+      docker login ghcr.io -u ${ghcr_username} -p ${ghcr_password}
+      docker pull ghcr.io/shukawam/k8s-helidon-app:latest
+
+outputArtifacts:
+  - name: k8s-helidon-app-deployment
+    type: BINARY
+    location: kubernetes/deployment.yaml
+  - name: k8s-helidon-app-ingress
+    type: BINARY
+    location: kubernetes/ingress.yaml
+  - name: k8s-helidon-app-service
+    type: BINARY
+    location: kubernetes/service.yaml
+  - name: k8s-helidon-app-image
+    type: DOCKER_IMAGE
+    location: ghcr.io/shukawam/k8s-helidon-app:latest
