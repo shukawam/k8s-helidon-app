@@ -3,10 +3,15 @@ kind: Ingress
 metadata:
   name: k8s-helidon-app
   annotations:
-    kubernetes.io/ingress.class: "nginx"
+    kubernetes.io/ingress.class: nginx
+    cert-manager.io/cluster-issuer: letsencrypt-prod
 spec:
+  tls:
+    hosts:
+      - helidon.shukawam.me
+    secretName: shukawam-tls-secret
   rules:
-    - host: helidon.shukawam.com
+    - host: helidon.shukawam.me
       http:
         paths:
           - backend:
