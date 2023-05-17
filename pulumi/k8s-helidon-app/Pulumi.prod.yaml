@@ -1,0 +1,13 @@
+config:
+  k8s-helidon-app:data:
+    namespace: prod
+    deployment:
+      replicas: 3
+    ingress:
+      host: helidon.prod.shukawam.me
+      tls:
+        hosts:
+          - helidon.prod.shukawam.me
+        secretName: shukawam-tls-secret
+    cowweb:
+      message: Prod!

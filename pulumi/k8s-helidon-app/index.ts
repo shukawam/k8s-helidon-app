@@ -1,13 +1,29 @@
+import * as pulumi from "@pulumi/pulumi";
 import * as k8s from "@pulumi/kubernetes";
 import * as kx from "@pulumi/kubernetesx";
 
-require("dotenv").config();
+interface Data {
+  namespace: string;
+  deployment: {
+    replicas: number;
+  };
+  ingress: {
+    host: string;
+    tls: {
+      hosts: string[];
+      secretName: string;
+    };
+  };
+  cowweb: {
+    message: string;
+  };
+}
+
+let config = new pulumi.Config();
+const data = config.requireObject<Data>("data");
 
 const appName = "k8s-helidon-app";
 const appLabels = { app: appName };
-const host = "helidon.shukawam.me";
-
-const namespace = process.env.NAMESPACE ?? "default";
 
 function defaultProbeGenerator(path: string) {
   return {
@@ -25,10 +41,10 @@ const deployment = new k8s.apps.v1.Deployment(appName, {
   apiVersion: "apps/v1",
   metadata: {
     name: appName,
-    namespace: namespace,
+    namespace: data.namespace,
   },
   spec: {
-    replicas: 3,
+    replicas: data.deployment.replicas,
     selector: { matchLabels: appLabels },
     template: {
       metadata: { labels: appLabels },
@@ -41,6 +57,7 @@ const deployment = new k8s.apps.v1.Deployment(appName, {
             ports: [{ name: "api", containerPort: 8080 }],
             readinessProbe: defaultProbeGenerator("/health/ready"),
             livenessProbe: defaultProbeGenerator("/health/live"),
+            env: [{ name: "cowweb.message", value: data.cowweb.message }],
           },
         ],
         imagePullSecrets: [{ name: "ghcr-secret" }],
@@ -54,7 +71,7 @@ const service = new k8s.core.v1.Service(appName, {
   apiVersion: "v1",
   metadata: {
     name: appName,
-    namespace: namespace,
+    namespace: data.namespace,
     labels: {
       app: appName,
       "prometheus.io/scrape": "true",
@@ -72,17 +89,22 @@ const ingress = new k8s.networking.v1.Ingress(appName, {
   apiVersion: "networking.k8s.io/v1",
   metadata: {
     name: appName,
-    namespace: namespace,
+    namespace: data.namespace,
     annotations: {
       "kubernetes.io/ingress.class": "nginx",
       "cert-manager.io/cluster-issuer": "letsencrypt-prod",
     },
   },
   spec: {
-    tls: [{ hosts: [host], secretName: "shukawam-tls-secret" }],
+    tls: [
+      {
+        hosts: data.ingress.tls.hosts,
+        secretName: data.ingress.tls.secretName,
+      },
+    ],
     rules: [
       {
-        host: host,
+        host: data.ingress.tls.hosts[0],
         http: {
           paths: [
             {
