@@ -2,7 +2,7 @@
     "name": "k8s-helidon-app",
     "main": "index.ts",
     "devDependencies": {
-        "@types/node": "^16"
+        "@types/node": "^18.0.0"
     },
     "dependencies": {
         "@pulumi/kubernetes": "^3.0.0",
