@@ -16,7 +16,7 @@ Cowsay Web API.
 
 ## Build and run
 
-With JDK19+
+With JDK20+
 
 ```bash
 ./mvnw package
