@@ -1,4 +1,4 @@
-name: Java CI with Maven
+name: Build k8s-helidon-app-otel
 
 on:
   workflow_dispatch:
@@ -38,6 +38,7 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v4
         with:
+          push: true
           file: Dockerfile.otel
           build-args:
             OTEL_EXPORTER_OTLP_TRACES_HEADERS=${{ secrets.OTEL_EXPORTER_OTLP_TRACES_HEADERS }}
