@@ -6,17 +6,20 @@ export class K8sHelidonAppIngress {
   namespace: string;
   hosts: string[];
   secretName: string;
+  host: string
 
   constructor(
     appName: string,
     namespace: string,
     hosts: string[],
-    secretName: string
+    secretName: string,
+    host: string
   ) {
     this.appName = appName;
     this.namespace = namespace;
     this.hosts = hosts;
     this.secretName = secretName;
+    this.host = host;
   }
 
   create(): k8s.networking.v1.Ingress {
@@ -37,7 +40,7 @@ export class K8sHelidonAppIngress {
       ],
       rules: [
         {
-          host: this.hosts[0],
+          host: this.host,
           http: {
             paths: [
               {

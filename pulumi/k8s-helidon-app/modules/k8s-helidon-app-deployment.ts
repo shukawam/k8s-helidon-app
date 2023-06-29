@@ -7,18 +7,21 @@ export class K8sHelidonAppDeployment {
   namespace: string;
   replicas: number;
   image: string;
+  envs?: pulumi.Input<k8s.types.input.core.v1.EnvVar>[];
 
   constructor(
     appName: string,
     namespace: string,
     replicas: number,
-    image: string
+    image: string,
+    envs?: pulumi.Input<k8s.types.input.core.v1.EnvVar>[]
   ) {
     this.appName = appName;
     this.namespace = namespace;
     this.appLabels = { app: appName };
     this.replicas = replicas;
     this.image = image;
+    this.envs = envs;
   }
 
   create(): k8s.apps.v1.Deployment {
@@ -45,6 +48,7 @@ export class K8sHelidonAppDeployment {
                   containerPort: 8080,
                 },
               ],
+              env: this.env,
               readinessProbe: this.probeGen("/health/ready"),
               livenessProbe: this.probeGen("/health/live"),
             },
