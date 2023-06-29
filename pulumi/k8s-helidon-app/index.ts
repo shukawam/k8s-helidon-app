@@ -12,13 +12,15 @@ const deployment = new K8sHelidonAppDeployment(
   data.appName,
   data.namespace,
   data.deployment.replicas,
-  data.deployment.image
+  data.deployment.image,
+  data.deployment.envs
 ).create();
 const ingress = new K8sHelidonAppIngress(
   data.appName,
   data.namespace,
   data.ingress.tls.hosts,
-  data.ingress.tls.secretName
+  data.ingress.tls.secretName,
+  data.ingress.host
 ).create();
 
 export const deploymentName = deployment.metadata.name;
