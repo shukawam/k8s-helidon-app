@@ -1,3 +1,0 @@
-name: k8s-helidon-app
-runtime: nodejs
-description: A Kubernetes TypeScript Pulumi program for k8s-helidon-app
