@@ -6,7 +6,7 @@
     <parent>
         <groupId>io.helidon.applications</groupId>
         <artifactId>helidon-mp</artifactId>
-        <version>4.0.0-ALPHA6</version>
+        <version>4.0.0-M1</version>
         <relativePath/>
     </parent>
     <groupId>me.shukawam</groupId>
@@ -50,7 +50,7 @@
             <scope>runtime</scope>
         </dependency>
         <dependency>
-            <groupId>org.jboss</groupId>
+            <groupId>io.smallrye</groupId>
             <artifactId>jandex</artifactId>
             <scope>runtime</scope>
         </dependency>
@@ -102,7 +102,7 @@
                 </executions>
             </plugin>
             <plugin>
-                <groupId>org.jboss.jandex</groupId>
+                <groupId>io.smallrye</groupId>
                 <artifactId>jandex-maven-plugin</artifactId>
                 <executions>
                     <execution>
