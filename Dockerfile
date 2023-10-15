@@ -6,7 +6,7 @@ ADD src src
 RUN mvn package -DskipTests
 RUN echo "done!"
 
-FROM eclipse-temurin:20-jdk
+FROM eclipse-temurin:21-jdk
 WORKDIR /helidon
 COPY --from=build /helidon/target/k8s-helidon-app.jar ./
 COPY --from=build /helidon/target/libs ./libs
