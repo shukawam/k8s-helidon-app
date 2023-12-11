@@ -1,4 +1,4 @@
-FROM maven:3.9.4-eclipse-temurin-21 as build
+FROM maven:3.9.6-eclipse-temurin-21 as build
 WORKDIR /helidon
 ADD pom.xml .
 RUN mvn package -Dmaven.test.skip -Declipselink.weave.skip
